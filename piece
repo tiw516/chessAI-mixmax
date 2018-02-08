@@ -1,0 +1,67 @@
+
+public abstract class piece {
+	private int x;
+	private int y;
+	private String type;
+	private boolean human; 
+	private boolean selected;
+//	private point loca;
+	
+	public piece(int x, int y, boolean human, String type){
+		this.x = x;
+		this.y = y;
+		this.selected = false;
+		this.human = human;
+		this.type = type;
+//		loca = new point(x,y);
+	}
+	
+	public boolean checkteam(){
+		return human;
+	}
+	
+	public void changeteam(){
+		if (human == false){
+			human = true;
+		}
+	}
+	
+//	public void killdragon(int x, int y, map m){
+//		
+//	}
+	
+	public void setSelected(boolean selected){
+		this.selected =  selected;
+	}
+	
+	public boolean isSelected(){
+		return selected;
+	}
+	
+	public String getType(){
+		return type;
+	}
+	
+	public int getX(){
+		return x;
+	}
+	
+	public int getY(){
+		return y;
+	}
+	
+	public void turnTodragon(){
+		this.type = "D";
+		this.human = false;
+	}
+	
+	public boolean setlocation(int x, int y){
+		this.x = x;
+		this.y = y;
+		return true;
+	}
+	
+	public abstract boolean checkmove(int x, int y, map m);
+	
+	public abstract int checksurround(int x, int y, map m);
+}
