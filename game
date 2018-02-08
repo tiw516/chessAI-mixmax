@@ -1,0 +1,125 @@
+
+public class game {
+	private boolean turn; // true means dragons, false means human
+	private int mode; // 0 is two players, 1 is one player
+	private boolean end;//true means game has been won, false means is not over
+	private String result;
+	private AI player;
+	
+	private String playerOneName;
+	private String playerTwoName;
+	
+	
+	public game(int mode){
+		turn = false;
+		this.mode = mode;
+		end = false;
+		if (mode == 1){
+			player = (AI) new minmax();
+		}
+	}
+	
+	public void changeTurn(){
+		turn = !turn;
+		if(mode == 0){
+			if(!turn){
+				System.out.println(playerOneName + "'s Turn");
+			}else{
+				System.out.println(playerTwoName + "'s Turn");
+			}
+		}else if(mode == 1){
+			if(!turn){
+				System.out.println("Your turn!");
+			}else{
+				System.out.println("AI's turn!");
+			}
+		}
+	}
+	
+	public void checkresult(map m){
+		end = true;
+		if (m.kingatbuttom(m)){
+			end = true;
+			result = "human win";
+		}
+		else if (turn == true){
+			piece[] g;
+			for (int a=0; a<5; a++){
+				for (int b=0; b<5; b++){
+					if (m.haspiece(a, b)){
+						piece p = m.getpiece(a, b);
+//				        piece[] g;
+						if (m.getpiece(a, b).getType().equals("K")){
+							if (!p.checkmove(a, b+1, m) && !p.checkmove(a+1, b, m) && !p.checkmove(a-1, b, m) && !p.checkmove(a, b-1, m)){
+								end = true;
+								result = "dragon win";
+							}
+						}
+						/*if (m.getpiece(a, b).getType().equals("G")){
+							for (int c=0; c<g.length; c++){
+								if (g[c] == null){
+									g[c] = m.getpiece(a, b);
+								}*/
+					}
+				}
+			}
+		}
+		else if (turn == false){
+			piece[] g;
+			int num=0;
+			int num2=0;
+			for (int a=0; a<5; a++){
+				for (int b=0; b<5; b++){
+					if (m.haspiece(a, b)){
+						if (m.getpiece(a, b).getType().equals("D")){
+							num++;
+							/*for (int c=0; c<g.length; c++){
+								if (g[c] == null){
+									g[c] = m.getpiece(a, b);
+								}
+							}*/
+							if (!m.getpiece(a, b).checkmove(a+1, b, m) && !m.getpiece(a, b).checkmove(a, b+1, m) && !m.getpiece(a, b).checkmove(a-1, b, m) && !m.getpiece(a, b).checkmove(a, b-1, m) && !m.getpiece(a, b).checkmove(a+1, b+1, m) && !m.getpiece(a, b).checkmove(a-1, b-1, m)){
+								num2++;
+							}
+						}
+					}
+				}
+			}
+			if (num == num2){
+				end = true;
+				result = "draw";
+			}
+			
+		}
+	}
+			/*for (int d=0; d<g.length; g++){
+				if (g[d].checkmove(x, y, m))
+			}*/
+	public void checkchange(map m){
+		for (int a=0; a<5; a++){
+			for (int b=0; b<5; b++){
+				if (m.getpiece(a, b).getType().equals("G")){
+					if (m.getpiece(a, b).checksurround(a, b, m)>=3){
+						m.getpiece(a, b).turnTodragon();
+					}
+				}
+				if (m.getpiece(a, b).getType().equals("D")){
+					if (m.getpiece(a, b).checksurround(a, b, m)>=2 ){
+						m.getpiece(a, b).changeteam();
+					}
+				}
+			}
+		}
+	}
+	
+	public boolean killdragon(int x, int y, map m){
+		if (m.getType(x, y).equals("D")){
+			if (m.getpiece(x, y).checkteam() == true){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+}
+	
