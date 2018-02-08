@@ -1,0 +1,89 @@
+
+public class king extends piece {
+	
+	public king(int x, int y){
+		super(x,y,true,"K");
+	}
+	
+	public boolean checkmove(int x, int y, map m){
+		int oldx = super.getX();
+		int oldy = super.getY();
+		int newx = x;
+		int newy = y;
+		
+		if (newx>4 || newx<0 || newy>4 || newy<0){
+			return false;
+		}
+		
+		if (m.haspiece(newx, newy)){
+			if (m.getType(newx, newy).equals("D")){
+				return false;
+			}
+			else{
+				if (newx == oldx){
+					if (newy > oldy){
+						if (newy+1 >4){
+							return false;
+						}
+					}
+					else{
+						if (newy-1 <0){
+							return false;
+						}
+					}
+				}
+				else if (newy == oldy){
+					if (newx > oldx){
+						if (newx+1 >4){
+							return false;
+						}
+					}
+					else{
+						if (newx-1 <0){
+							return false;
+						}
+					}
+				}
+			}
+		}
+		
+		if (Math.abs(newx-oldx)>1 || Math.abs(newy-oldy)>1){
+			return false;
+		}
+		
+		if (Math.abs(newx-oldx)==1 && newy!=oldy){
+			return false;
+		}
+		
+		if (Math.abs(newy-oldy)==1 && newx!=oldx){
+			return false;
+		}
+		
+	return true;	
+	}
+	
+	public int checksurround(int x, int y, map m){
+		int num =0;
+		if (m.haspiece(x+1, y)){
+			if (m.getpiece(x+1, y).checkteam() == false){
+				num++;
+			}
+		}
+		if (m.haspiece(x, y+1)){
+			if (m.getpiece(x+1, y).checkteam() == false){
+				num++;
+			}
+		}
+		if (m.haspiece(x-1, y)){
+			if (m.getpiece(x+1, y).checkteam() == false){
+				num++;
+			}
+		}
+		if (m.haspiece(x, y-1)){
+			if (m.getpiece(x+1, y).checkteam() == false){
+				num++;
+			}
+		}
+		return num;
+	}
+}
