@@ -1,0 +1,64 @@
+
+public class dragon extends piece {
+	
+	public dragon(int x, int y){
+		super(x,y,false,"D");
+//		boolean canbekilled = false;
+	}
+	
+	public boolean checkmove(int x, int y, map m){
+		int oldx = super.getX();
+		int oldy = super.getY();
+		int newx = x;
+		int newy = y;
+		
+		if (newx>4 || newx<0 || newy>4 || newy<0){
+			return false;
+		}
+		
+		if (m.haspiece(newx, newy)){
+			return false;
+		}
+		
+		if (Math.abs(newx-oldx)>1 || Math.abs(newy-oldy)>1){
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public int checksurround(int x, int y, map m){
+		int num =0;
+		if (m.haspiece(x+1, y)){
+			if (m.getpiece(x+1, y).checkteam() == true){
+				num++;
+			}
+		}
+		if (m.haspiece(x, y+1)){
+			if (m.getpiece(x, y+1).checkteam() == true){
+				num++;
+			}
+		}
+		if (m.haspiece(x-1, y)){
+			if (m.getpiece(x-1, y).checkteam() == true){
+				num++;
+			}
+		}
+		if (m.haspiece(x, y-1)){
+			if (m.getpiece(x, y-1).checkteam() == true){
+				num++;
+			}
+		}
+		return num;
+	}
+	
+	public boolean checkkill(int x, int y, map m){
+		if (m.getpiece(x, y).checksurround(x, y, m)>=2){
+			m.getpiece(x, y).changeteam();
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+}
